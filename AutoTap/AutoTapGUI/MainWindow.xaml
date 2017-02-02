@@ -1,0 +1,631 @@
+﻿<Window x:Class="AutoTapGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoTapGUI"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="AutoTap" Height="700" Width="670" Closing="Window_Closing" StateChanged="Window_StateChanged" Loaded="Window_Loaded" Icon="Asset/Phone.ico">
+
+    <DockPanel LastChildFill="True">
+        <GroupBox Header="基本操作" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" DockPanel.Dock="top">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Label>端末設定を選択</Label>
+                    <ComboBox x:Name="comboBoxSelectConfig" Margin="0,0,0,0" SelectionChanged="comboBoxSelectConfig_SelectionChanged" MinWidth="80"/>
+                    <Label>動作モード</Label>
+                    <ComboBox x:Name="comboBoxWorkingMode" Margin="0,0,0,0" SelectionChanged="comboBoxWorkingMode_SelectionChanged" MinWidth="80"/>
+                    <Label>次の動作モード</Label>
+                    <ComboBox x:Name="comboBoxNextMode" Margin="0,0,0,0" SelectionChanged="comboBoxNextMode_SelectionChanged" MinWidth="80"/>
+                </StackPanel>
+                <DockPanel LastChildFill="True" Margin="5">
+                    <Button x:Name="buttonReset" Content="端末設定リセット" HorizontalAlignment="Right" Width="100" Margin="5,0,0,0" Height="23" DockPanel.Dock="Right" Click="buttonReset_Click"/>
+                    <Button x:Name="buttonStart" Content="開始" HorizontalAlignment="Left" Width="60" Margin="5,0,0,0" Height="23" Click="buttonStart_Click" DockPanel.Dock="Left"/>
+                    <Button x:Name="buttonStop" Content="停止" HorizontalAlignment="Left" Width="60" Margin="5,0,0,0" Height="23" Click="buttonStop_Click" DockPanel.Dock="Left"/>
+                    <Button x:Name="buttonQuit" Content="終了" HorizontalAlignment="Left" Width="60" Margin="5,0,0,0" Height="23" Click="buttonQuit_Click" />
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
+        <TabControl x:Name="tabControl" Margin="10,10,10,10">
+            <TabItem Header="ログ">
+                <DockPanel LastChildFill="True">
+                    <TextBox x:Name="textBoxLog" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextChanged="textBoxLog_TextChanged"/>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="端末設定">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <GroupBox Header="CheckInボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="CheckInAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="CheckInAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="CheckInAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="CheckInAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Linkボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="LinkAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="LinkAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="LinkAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="LinkAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="LinkWindowを閉じるタップエリアの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="WindowCloseAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="WindowCloseAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="WindowCloseAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="WindowCloseAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="かばんボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="BagButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="BagButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="BagButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="BagButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="バッテリーボタンの範囲" Margin="10" ToolTip="かばんを押した後のバッテリーボタンです">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="BatteryButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="BatteryButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="BatteryButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="BatteryButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="バッテリー50ボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Charge50ButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Charge50ButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Charge50ButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Charge50ButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="バッテリー150ボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Charge150ButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Charge150ButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Charge150ButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Charge150ButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="バッテリー300ボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Charge300ButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Charge300ButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Charge300ButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Charge300ButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="回復画面のCloseボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="CloseButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="CloseButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="CloseButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="CloseButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="エラーを閉じるボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="ErrorButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="ErrorButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="ErrorButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="ErrorButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="レーダーボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="RadarButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="RadarButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="RadarButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="RadarButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="1個目のレーダー使用ボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Radar1ButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Radar1ButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="Radar1ButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="Radar1ButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="ボタン間のY座標オフセット:" />
+                                    <TextBox x:Name="RadarButtonsOffsetY" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="レーダー画面を閉じるボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="RadarCloseButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="RadarCloseButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="RadarCloseButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="RadarCloseButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="メンテナンスから駅メモに戻るボタンの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="ReturnMaintenanceButtonAreaXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="ReturnMaintenanceButtonAreaYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="右下の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="ReturnMaintenanceButtonAreaXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="ReturnMaintenanceButtonAreaYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="インターバル" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="Linkボタン押下後のインターバル:" />
+                                    <TextBox x:Name="WindowOpenInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="Linkボタンを閉じた時のインターバル:" />
+                                    <TextBox x:Name="WindowCloseInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="回復エラー対策のインターバル:" />
+                                    <TextBox x:Name="WindowCloseAnotherInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="次回CheckInのインターバル最小値:" />
+                                    <TextBox x:Name="CheckInIntervalMin" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="次回CheckInのインターバル最大値:" />
+                                    <TextBox x:Name="CheckInIntervalMax" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="リンク継続確認インターバル最小値:" />
+                                    <TextBox x:Name="MaintainLinkIntervalMin" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="リンク継続確認インターバル最大値:" />
+                                    <TextBox x:Name="MaintainLinkIntervalMax" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="充電中の充電確認インターバル:" />
+                                    <TextBox x:Name="ChargeBattelyInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="UnlockのためにPowerボタン押下後インターバル:" />
+                                    <TextBox x:Name="UnlockPowerInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="Unlockのためにスワイプ後インターバル:" />
+                                    <TextBox x:Name="UnlockSwipeInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="UnlockのためにPIN/Password入力後インターバル:" />
+                                    <TextBox x:Name="UnlockInputInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="UnlockのためにEnter押下後インターバル:" />
+                                    <TextBox x:Name="WakeupInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="CheckInボタン押下後インターバル:" />
+                                    <TextBox x:Name="DoCheckInInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="CheckIn画面を閉じるタップ後インターバル:" />
+                                    <TextBox x:Name="CloseCheckInInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="かばんボタン押下後インターバル:" />
+                                    <TextBox x:Name="BagButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="バッテリーボタン押下後インターバル:" />
+                                    <TextBox x:Name="BattryButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="バッテリー50/150/300ボタン押下後インターバル:" />
+                                    <TextBox x:Name="ChargeButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="回復画面のCloseボタン押下後インターバル:" />
+                                    <TextBox x:Name="CloseButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="Error画面脱出後インターバル:" />
+                                    <TextBox x:Name="ErrorButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="ScreenShot撮影後インターバル:" />
+                                    <TextBox x:Name="TakeScreenShotInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="ScreenShotファイルPull後インターバル:" />
+                                    <TextBox x:Name="PullFileInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="ScreenShotファイル削除後インターバル:" />
+                                    <TextBox x:Name="RemoveFileInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダーボタン押下後インターバル:" />
+                                    <TextBox x:Name="RadarButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダー使用後インターバル:" />
+                                    <TextBox x:Name="RadarCheckInInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダーCloseボタン押下後インターバル:" />
+                                    <TextBox x:Name="RadarCloseButtonInterval" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダー試行判断回数:"  ToolTip="「レーダー試行判断時間」個のにこの回数分レーダーを使用した場合、「レーダー再試行インターバル」分待ちます。"/>
+                                    <TextBox x:Name="RadarCheckInTryNum" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="回" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダー試行判断時間:" ToolTip="この時間内に「レーダー試行判断回数」個のレーダーを使用した場合、「レーダー再試行インターバル」分待ちます。"/>
+                                    <TextBox x:Name="RadarCheckInTryTime" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダー再試行インターバル最小値:" ToolTip="「レーダー試行判断時間」内に「レーダー試行判断回数」個のレーダーを使用した場合、この時間分待つ最小値です。" />
+                                    <TextBox x:Name="RadarCheckInTryIntervalMin" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="レーダー再試行インターバル最大値:" ToolTip="「レーダー試行判断時間」内に「レーダー試行判断回数」個のレーダーを使用した場合、この時間分待つ最大値です。" />
+                                    <TextBox x:Name="RadarCheckInTryIntervalMax" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="使用していいレーダーの数:" />
+                                    <TextBox x:Name="RadarUseableNum" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="回" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="「Tough」モード時の回復時間最小値:" />
+                                    <TextBox x:Name="ToughRecoveryTimeMin" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="「Tough」モード時の回復時間最大値:" />
+                                    <TextBox x:Name="ToughRecoveryTimeMax" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="「Tough」モード時の生存チェックインターバル最小値:" />
+                                    <TextBox x:Name="ToughCheckAliveIntervalMin" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <Label Content="「Tough」モード時の生存チェックインターバル最大値:" />
+                                    <TextBox x:Name="ToughCheckAliveIntervalMax" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="HP切り出しの範囲" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="左上の座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="ScreenShotTrimX" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="ScreenShotTrimY" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="画像サイズ" />
+                                    <Label Content="幅:" />
+                                    <TextBox x:Name="ScreenShotTrimWidth" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="高さ:" />
+                                    <TextBox x:Name="ScreenShotTrimHeight" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="画像" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="トリミング画像の保存パス:" />
+                                    <TextBox x:Name="TrimImageLocalPath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="OCRしたテキストの保存パス:" />
+                                    <TextBox x:Name="OcrTextLocalPath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="Link比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedLinkImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="Error比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedErrorImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="あいさつ比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedGreetingImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="ロード中比較画像Aの保存パス:" />
+                                    <TextBox x:Name="ComparedLoadingImagePathA" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="ロード中比較画像Bの保存パス:" />
+                                    <TextBox x:Name="ComparedLoadingImagePathB" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="メンテナンス比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedMaintenanceImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="起動時比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedOpeningImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="タイトル比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedTitleImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="タイムライン比較画像の保存パス:" />
+                                    <TextBox x:Name="ComparedTimelineImagePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="スクリーンショットの端末側保存パス:" />
+                                    <TextBox x:Name="ScreenShotRemotePath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="スクリーンショットのPC側保存パス:" />
+                                    <TextBox x:Name="ScreenShotLocalPath" Height="23" Width="200" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="閾値" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="パターンマッチングの閾値(0~1):" />
+                                    <TextBox x:Name="PatternMatchingThreshold" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="バッテリー十分ある閾値:" />
+                                    <TextBox x:Name="BatteryEnoughThreshold" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="バッテリー充電完了閾値:" />
+                                    <TextBox x:Name="BatteryMaxThreshold" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="回復しない閾値:" />
+                                    <TextBox x:Name="NoRecoverThreshold" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="アンロック" Margin="10">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,10,5">
+                                    <Label Content="スワイプ開始座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="UnlockXStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="UnlockYStart" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="スワイプ終了座標" />
+                                    <Label Content="X:" />
+                                    <TextBox x:Name="UnlockXEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="Y:" />
+                                    <TextBox x:Name="UnlockYEnd" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="スワイプ時間:" />
+                                    <TextBox x:Name="UnlockDuration" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                    <Label Content="ms:" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,5">
+                                    <Label Content="アンロックの種類(Pin/Password/None):" />
+                                    <TextBox x:Name="UnlockType" Height="23" Width="100" TextChanged="Config_TextChanged" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,5,10,10">
+                                    <Label Content="PIN/Password:" />
+                                    <PasswordBox x:Name="UnlockPassword" Height="23" Width="100" PasswordChanged="Config_TextChanged" />
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <Button x:Name="buttonSave" Content="Save" Margin="10" Width="75" HorizontalAlignment="Right" Click="buttonSave_Click" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="動作設定">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox x:Name="isStartMinimize" Content="開始時に最小化" Margin="10,10,10,10" VerticalAlignment="Center" Loaded="isStartMinimize_Loaded" Checked="isStartMinimize_Checked" Unchecked="isStartMinimize_Checked"/>
+                    <CheckBox x:Name="isShowSleepDetail" Content="詳細なスリープをログに表示" Margin="10,10,10,10" VerticalAlignment="Center" Loaded="isShowSleepDetail_Loaded" Checked="isShowSleepDetail_Checked" Unchecked="isShowSleepDetail_Checked"/>
+                    <CheckBox x:Name="isOutputLog" Content="ログをファイルに出力" Margin="10,10,10,10" VerticalAlignment="Center" Loaded="isOutputLog_Loaded" Checked="isOutputLog_Checked" Unchecked="isOutputLog_Checked"/>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+                        <CheckBox x:Name="isStartTimer" Content="開始タイマー" VerticalAlignment="Center" Loaded="isStartTimer_Loaded" Checked="isStartTimer_Checked" Unchecked="isStartTimer_Checked"/>
+                        <WindowsFormsHost Margin="10,0,0,0" MinWidth="230" x:Name="wfhStart">
+                            <wf:DateTimePicker ShowUpDown="True" Format="Custom" CustomFormat="yyyy年MM月dd日(dddd)HH時mm分ss秒" />
+                        </WindowsFormsHost>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
+                        <CheckBox x:Name="isStopTimer" Content="終了タイマー" VerticalAlignment="Center" Loaded="isStopTimer_Loaded" Checked="isStopTimer_Checked" Unchecked="isStopTimer_Checked"/>
+                        <WindowsFormsHost Margin="10,0,0,0" MinWidth="230" x:Name="wfhStop">
+                            <wf:DateTimePicker ShowUpDown="True" Format="Custom" CustomFormat="yyyy年MM月dd日(dddd)HH時mm分ss秒" />
+                        </WindowsFormsHost>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
+                        <Label Content="使用するバッテリー:" Margin="0,0,5,0"/>
+                        <CheckBox x:Name="isUseBattery50" Content="50" VerticalAlignment="Center" Loaded="isUseBattery50_Loaded" Checked="isUseBattery50_Checked" Unchecked="isUseBattery50_Checked" Margin="0,0,10,0"/>
+                        <CheckBox x:Name="isUseBattery150" Content="150" VerticalAlignment="Center" Loaded="isUseBattery150_Loaded" Checked="isUseBattery150_Checked" Unchecked="isUseBattery150_Checked" Margin="0,0,10,0"/>
+                        <CheckBox x:Name="isUseBattery300" Content="300" VerticalAlignment="Center" Loaded="isUseBattery300_Loaded" Checked="isUseBattery300_Checked" Unchecked="isUseBattery300_Checked" Margin="0,0,10,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+                        <Label Content="使用するレーダー:　上から" Margin="0,0,0,0"/>
+                        <ComboBox x:Name="comboBoxSelectRadarOrder" Margin="0,0,0,0" SelectionChanged="comboBoxSelectRadarOrder_SelectionChanged"/>
+                        <Label Content="個下のレーダー（0が最も上、最大7まで）" Margin="0,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

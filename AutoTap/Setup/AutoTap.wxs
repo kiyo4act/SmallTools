@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="AutoTap" Language="1041" Codepage="932" Version="2.3.10" Manufacturer="Log With Reptiles" UpgradeCode="e46fa7f5-b098-4008-88b0-d30102a10f4d">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Id="*" Languages="1041" SummaryCodepage="932"/>
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" />
+        <MediaTemplate EmbedCab="yes"/>
+        <FeatureRef Id="Complete"/>
+        <UIRef Id="WixUI_Minimal" />
+        <UIRef Id="WixUI_ErrorProgressText" />
+        <Icon Id="AutoTapGUI.exe" SourceFile="$(var.AutoTapGUI.TargetDir)AutoTapGUI.exe" />
+    </Product>
+    <Fragment>
+        <Feature Id="Complete" Title="AutoTap Feature" Description="Complete Package" Display="expand" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+            <Feature Id="MainProgram" Title="Main Program" Description="Main executable files" Level="1">
+                <ComponentGroupRef Id="MainConponents" />
+                <ComponentGroupRef Id="x86Components" />
+                <ComponentGroupRef Id="Nexus5ImagesComponents" />
+                <ComponentGroupRef Id="Nexus5xImagesComponents" />
+                <ComponentGroupRef Id="Nexus6pImagesComponents" />
+                <ComponentGroupRef Id="GR5ImagesComponents" />
+                <ComponentGroupRef Id="PresetComponents" />
+                <ComponentGroupRef Id="tessconfigsComponents" />
+                <ComponentGroupRef Id="ProgramMenuShortcutComponents"/>
+                <ComponentGroupRef Id="CommonAppDataFolderLWRComponents"/>
+            </Feature>
+            <Feature Id="Adb" Title="ADB Tools" Description="To connect Android device toolset." Level="1">
+                <ComponentGroupRef Id="AdbConponents" />
+            </Feature>
+            <Feature Id="Tesseract_Ocr" Title="OCR Tools" Description="To ocr from screenshot." Level="1">
+                <ComponentGroupRef Id="Tesseract_OcrComponents" />
+                <ComponentGroupRef Id="docComponents" />
+                <ComponentGroupRef Id="javaComponents" />
+                <ComponentGroupRef Id="outputComponents" />
+                <ComponentGroupRef Id="tessdataComponents" />
+                <ComponentGroupRef Id="configsComponents" />
+            </Feature>
+        </Feature>
+    </Fragment>
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="MANUFACTUREFOLDER" Name="LWR">
+                    <Directory Id="INSTALLFOLDER" Name="AutoTap">
+                        <Directory Id="ADB" Name="Adb" />
+                        <Directory Id="DLL" Name="dll">
+                            <Directory Id="X86" Name="x86" />
+                        </Directory>
+                        <Directory Id="PRESET" Name="Preset" />
+                        <Directory Id="IMAGES" Name="Images">
+                            <Directory Id="NEXUS5" Name="Nexus5" />
+                            <Directory Id="NEXUS5X" Name="Nexus5X" />
+                            <Directory Id="NEXUS6P" Name="Nexus6P" />
+                            <Directory Id="GR5" Name="GR5" />
+                        </Directory>
+                        <Directory Id="TESSERACT_OCR" Name="Tesseract-OCR">
+                            <Directory Id="DOC" Name="doc" />
+                            <Directory Id="JAVA" Name="java" />
+                            <Directory Id="OUTPUT" Name="output" />
+                            <Directory Id="TESSDATA" Name="tessdata">
+                                <Directory Id="CONFIGS" Name="configs" />
+                                <Directory Id="TESSCONFIGS" Name="tessconfigs" />
+                            </Directory>
+                        </Directory>
+                    </Directory>
+                </Directory>
+            </Directory>
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ProgramMenuDir" Name="AutoTap">
+                </Directory>
+            </Directory>
+            <Directory Id="DesktopFolder"/>
+            <Directory Id="CommonAppDataFolder">
+                <Directory Id="CommonAppDataFolderLWR" Name="LWR">
+                    <Directory Id="CommonAppDataFolderAutoTap" Name="AutoTap">
+                    </Directory>
+                </Directory>
+            </Directory>
+        </Directory>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="MainConponents" Directory="INSTALLFOLDER">
+            <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+            <!-- <Component Id="ProductComponent"> -->
+            <!-- TODO: Insert files, registry keys, and other resources here. -->
+            <!-- </Component> -->
+            <Component Id="ADBOPERATIONS.DLL" DiskId="1" Guid="BFED3351-49D3-4614-8F90-21CFDD425CE8">
+                <File Id="ADBOPERATIONS.DLL" Name="AdbOperations.dll" Source="..\AutoTapGUI\bin\Release\AdbOperations.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="AUTOTAPGUI.EXE" DiskId="1" Guid="14C6132F-9639-4094-96F0-87A6A6F98559">
+                <File Id="AUTOTAPGUI.EXE" Name="AutoTapGUI.exe" Source="..\AutoTapGUI\bin\Release\AutoTapGUI.exe" KeyPath='yes' />
+                <Shortcut Id="StartmenuAutoTap" Name="AutoTap" Directory="ProgramMenuDir" Advertise="yes" Icon="AutoTapGUI.exe" IconIndex="0" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="DesktopAutoTap" Name="AutoTap" Directory="DesktopFolder" Advertise="yes" Icon="AutoTapGUI.exe" IconIndex="0" WorkingDirectory="INSTALLFOLDER" />
+            </Component>
+            <Component Id="AUTOTAPGUI.EXE.CONFIG" DiskId="1" Guid="CA146F42-A289-4056-9A56-2F86380C519D">
+                <File Id="AUTOTAPGUI.EXE.CONFIG" Name="AutoTapGUI.exe.config" Source="..\AutoTapGUI\bin\Release\AutoTapGUI.exe.config" KeyPath='yes' />
+            </Component>
+            <Component Id="HARDCODET.WPF.TASKBARNOTIFICATION.DLL" DiskId="1" Guid="E2C767FE-676C-4EEB-9152-A20C46C1A2C0">
+                <File Id="HARDCODET.WPF.TASKBARNOTIFICATION.DLL" Name="Hardcodet.Wpf.TaskbarNotification.dll" Source="..\AutoTapGUI\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCVSHARP.DLL" DiskId="1" Guid="B4655606-7DD5-4BEB-89E7-34B0DE4A5442">
+                <File Id="OPENCVSHARP.DLL" Name="OpenCvSharp.dll" Source="..\AutoTapGUI\bin\Release\OpenCvSharp.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCVSHARP.XML" DiskId="1" Guid="77794FF8-CF69-4B96-A2C4-65A445AA6508">
+                <File Id="OPENCVSHARP.XML" Name="OpenCvSharp.xml" Source="..\AutoTapGUI\bin\Release\OpenCvSharp.xml" KeyPath='yes' />
+            </Component>
+            <Component Id="UTILITIES.DLL" DiskId="1" Guid="42F13A0A-0BC9-4217-ADB3-81865600C5DD">
+                <File Id="UTILITIES.DLL" Name="Utilities.dll" Source="..\AutoTapGUI\bin\Release\Utilities.dll" KeyPath='yes' />
+            </Component>
+            <Component Id ='RemInstallFolder' Guid='5D240ECE-BBAC-422D-BAD1-80A758B58452'>
+                <RemoveFolder Id='RemInstallFolder' On='uninstall' Directory='INSTALLFOLDER'/>
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="AdbConponents" Directory="ADB">
+            <Component Id="ADB.EXE" DiskId="1" Guid="BAAA94EB-19A5-4864-B216-F5CF82377E1E">
+                <File Id="ADB.EXE" Name="adb.exe" Source="..\AutoTapGUI\bin\Release\Adb\adb.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="ADBWINAPI.DLL" DiskId="1" Guid="706CD790-C9E0-4253-B1FF-9D63AD64DAA2">
+                <File Id="ADBWINAPI.DLL" Name="AdbWinApi.dll" Source="..\AutoTapGUI\bin\Release\Adb\AdbWinApi.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="ADBWINUSBAPI.DLL" DiskId="1" Guid="07C4106A-8E1D-4753-830C-DEA923DD92CB">
+                <File Id="ADBWINUSBAPI.DLL" Name="AdbWinUsbApi.dll" Source="..\AutoTapGUI\bin\Release\Adb\AdbWinUsbApi.dll" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="x86Components" Directory="X86">
+            <Component Id="MSVCP120.DLL_1" DiskId="1" Guid="91DF99F8-0033-425A-8C0E-EFC69044683B">
+                <File Id="MSVCP120.DLL_1" Name="msvcp120.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\msvcp120.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="MSVCR120.DLL_1" DiskId="1" Guid="63B14158-BD39-46B1-9EAA-311430815855">
+                <File Id="MSVCR120.DLL_1" Name="msvcr120.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\msvcr120.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCVSHARPEXTERN.DLL_1" DiskId="1" Guid="515E91B6-92E4-42A9-8390-7DF5833CB714">
+                <File Id="OPENCVSHARPEXTERN.DLL_1" Name="OpenCvSharpExtern.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\OpenCvSharpExtern.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_CALIB3D2410.DLL_1" DiskId="1" Guid="19760CA8-BD0B-4A1A-9FC8-CE598FDFEBB3">
+                <File Id="OPENCV_CALIB3D2410.DLL_1" Name="opencv_calib3d2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_calib3d2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_CONTRIB2410.DLL_1" DiskId="1" Guid="01ABB443-3F3A-4728-8B27-DF8BDF94135E">
+                <File Id="OPENCV_CONTRIB2410.DLL_1" Name="opencv_contrib2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_contrib2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_CORE2410.DLL_1" DiskId="1" Guid="300E707A-D496-4EBF-B694-6D16D2891F80">
+                <File Id="OPENCV_CORE2410.DLL_1" Name="opencv_core2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_core2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_FEATURES2D2410.DLL_1" DiskId="1" Guid="2D33EE78-6EFD-4EFA-859B-D49ECE25116A">
+                <File Id="OPENCV_FEATURES2D2410.DLL_1" Name="opencv_features2d2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_features2d2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_FFMPEG2410.DLL" DiskId="1" Guid="C8BB527A-D800-4094-93DA-8D919BD12672">
+                <File Id="OPENCV_FFMPEG2410.DLL" Name="opencv_ffmpeg2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_ffmpeg2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_FLANN2410.DLL_1" DiskId="1" Guid="72A0439A-8D4B-4870-9A0C-CB52EBE108E8">
+                <File Id="OPENCV_FLANN2410.DLL_1" Name="opencv_flann2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_flann2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_GPU2410.DLL_1" DiskId="1" Guid="33F53CAD-5A4A-44F5-897D-B99663B0C915">
+                <File Id="OPENCV_GPU2410.DLL_1" Name="opencv_gpu2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_gpu2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_HIGHGUI2410.DLL_1" DiskId="1" Guid="AB3CD8C1-44CD-4E92-A397-BAD8DD7D7677">
+                <File Id="OPENCV_HIGHGUI2410.DLL_1" Name="opencv_highgui2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_highgui2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_IMGPROC2410.DLL_1" DiskId="1" Guid="20D7A0F6-C665-4B5C-8D01-BECBEDDFCA7A">
+                <File Id="OPENCV_IMGPROC2410.DLL_1" Name="opencv_imgproc2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_imgproc2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_LEGACY2410.DLL_1" DiskId="1" Guid="AB71625A-918B-4A3A-BEA6-F6F8CCB32BA4">
+                <File Id="OPENCV_LEGACY2410.DLL_1" Name="opencv_legacy2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_legacy2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_ML2410.DLL_1" DiskId="1" Guid="DD76A1B6-DA75-460A-9DA9-DF9EB0C6DF10">
+                <File Id="OPENCV_ML2410.DLL_1" Name="opencv_ml2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_ml2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_NONFREE2410.DLL_1" DiskId="1" Guid="AF0DE9B8-9844-4449-8D79-9BB869A723B0">
+                <File Id="OPENCV_NONFREE2410.DLL_1" Name="opencv_nonfree2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_nonfree2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_OBJDETECT2410.DLL_1" DiskId="1" Guid="EB7DE29A-82B6-4BA0-87CE-A4F88881AA2B">
+                <File Id="OPENCV_OBJDETECT2410.DLL_1" Name="opencv_objdetect2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_objdetect2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_OCL2410.DLL_1" DiskId="1" Guid="2292BDD8-A828-499B-BF5A-0004CABE32E6">
+                <File Id="OPENCV_OCL2410.DLL_1" Name="opencv_ocl2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_ocl2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_PHOTO2410.DLL_1" DiskId="1" Guid="D6BA1287-B879-4F9F-BA96-E130F0A98A13">
+                <File Id="OPENCV_PHOTO2410.DLL_1" Name="opencv_photo2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_photo2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_STITCHING2410.DLL_1" DiskId="1" Guid="3E5E4633-C280-437D-8AA4-F88757D01E8B">
+                <File Id="OPENCV_STITCHING2410.DLL_1" Name="opencv_stitching2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_stitching2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_SUPERRES2410.DLL_1" DiskId="1" Guid="DD8F4B35-A5E5-4A4A-B56A-8338AC012B44">
+                <File Id="OPENCV_SUPERRES2410.DLL_1" Name="opencv_superres2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_superres2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_VIDEO2410.DLL_1" DiskId="1" Guid="6362DAB2-6E48-4629-8435-BDA97C2992D2">
+                <File Id="OPENCV_VIDEO2410.DLL_1" Name="opencv_video2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_video2410.dll" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENCV_VIDEOSTAB2410.DLL_1" DiskId="1" Guid="F8AD02A9-FCB5-429E-9EB7-6ACD70D057CC">
+                <File Id="OPENCV_VIDEOSTAB2410.DLL_1" Name="opencv_videostab2410.dll" Source="..\AutoTapGUI\bin\Release\dll\x86\opencv_videostab2410.dll" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="Nexus5ImagesComponents" Directory="NEXUS5">
+            <Component Id="LINK1_NEXUS5.PNG" DiskId="1" Guid="1602465A-3517-4773-98C7-3E0A73610773">
+                <File Id="LINK1_NEXUS5.PNG" Name="link1_Nexus5.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5\link1_Nexus5.png" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="Nexus5xImagesComponents" Directory="NEXUS5X">
+            <!--<Component Id="ERROR_NEXUS5X.PNG" DiskId="1" Guid="C7A16650-6CAE-47BE-AE5E-6AF534FE0C61">
+                <File Id="ERROR_NEXUS5X.PNG" Name="error_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\error_Nexus5x.png" KeyPath='yes' />
+            </Component>-->
+            <Component Id="GREETING_NEXUS5X.PNG" DiskId="1" Guid="B29E00CF-3BE5-42B4-9CAD-3007DEA41360">
+                <File Id="GREETING_NEXUS5X.PNG" Name="greeting_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\greeting_Nexus5x.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LINK1_NEXUS5X.PNG" DiskId="1" Guid="BC752879-24A9-47FE-86DC-AEAEB823CFEE">
+                <File Id="LINK1_NEXUS5X.PNG" Name="link1_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\link1_Nexus5x.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LOADINGA_NEXUS5X.PNG" DiskId="1" Guid="E0E67DD4-5E81-483B-AC17-5B00FEB1C188">
+                <File Id="LOADINGA_NEXUS5X.PNG" Name="loadingA_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\loadingA_Nexus5x.png" KeyPath='yes' />
+            </Component>
+            <!--<Component Id="LOADINGB_NEXUS5X.PNG" DiskId="1" Guid="2BB2B14D-63B9-4D76-89C6-36904305FEC8">
+                <File Id="LOADINGB_NEXUS5X.PNG" Name="loadingB_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\loadingB_Nexus5x.png" KeyPath='yes' />
+            </Component>-->
+            <Component Id="MAINTENANCE_NEXUS5X.PNG" DiskId="1" Guid="0FD138D7-7FC7-4FD5-A1BA-1A5E658CCB48">
+                <File Id="MAINTENANCE_NEXUS5X.PNG" Name="maintenance_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\maintenance_Nexus5x.png" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENING_NEXUS5X.PNG" DiskId="1" Guid="9EC72DF7-6EA8-4649-A6A2-FAF212BB587C">
+                <File Id="OPENING_NEXUS5X.PNG" Name="opening_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\opening_Nexus5x.png" KeyPath='yes' />
+            </Component>
+            <Component Id="TIMELINE_NEXUS5X.PNG" DiskId="1" Guid="7547EDB9-30D2-40DA-BC65-8242621AB556">
+                <File Id="TIMELINE_NEXUS5X.PNG" Name="timeline_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\timeline_Nexus5x.png" KeyPath='yes' />
+            </Component>
+            <Component Id="TITLE_NEXUS5X.PNG" DiskId="1" Guid="B97A5B7C-3AEB-4507-A58D-F973E17B3DBA">
+                <File Id="TITLE_NEXUS5X.PNG" Name="title_Nexus5x.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus5X\title_Nexus5x.png" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="Nexus6pImagesComponents" Directory="NEXUS6P">
+            <Component Id="ERROR_NEXUS6P.PNG" DiskId="1" Guid="606137BD-A47B-433A-9016-45A730423121">
+                <File Id="ERROR_NEXUS6P.PNG" Name="error_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\error_Nexus6p.png" KeyPath='yes' />
+            </Component>
+            <Component Id="GREETING_NEXUS6P.PNG" DiskId="1" Guid="7C4D0FF3-B904-4EC7-83F8-19F0E6DBE96C">
+                <File Id="GREETING_NEXUS6P.PNG" Name="greeting_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\greeting_Nexus6p.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LINK1_NEXUS6P.PNG" DiskId="1" Guid="22BF0CF6-5112-4B94-9E00-D92A1F339247">
+                <File Id="LINK1_NEXUS6P.PNG" Name="link1_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\link1_nexus6p.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LOADINGA_NEXUS6P.PNG" DiskId="1" Guid="12875234-125F-4A7A-B6C6-0360A796087C">
+                <File Id="LOADINGA_NEXUS6P.PNG" Name="loadingA_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\loadingA_Nexus6p.png" KeyPath='yes' />
+            </Component>
+          <Component Id="LOADINGB_NEXUS6P.PNG" DiskId="1" Guid="12875235-125F-4A7A-B6C6-0360A796087C">
+            <File Id="LOADINGB_NEXUS6P.PNG" Name="loadingB_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\loadingB_Nexus6p.png" KeyPath='yes' />
+          </Component>
+            <Component Id="MAINTENANCE_NEXUS6P.PNG" DiskId="1" Guid="B4637BC3-888F-4824-BDF4-03235CC20D58">
+                <File Id="MAINTENANCE_NEXUS6P.PNG" Name="maintenance_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\maintenance_Nexus6p.png" KeyPath='yes' />
+            </Component>
+            <Component Id="OPENING_NEXUS6P.PNG" DiskId="1" Guid="F7274BEA-318F-4ACC-912F-5DA9228B363A">
+                <File Id="OPENING_NEXUS6P.PNG" Name="opening_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\opening_Nexus6p.png" KeyPath='yes' />
+            </Component>
+            <Component Id="TIMELINE_NEXUS6P.PNG" DiskId="1" Guid="F2443218-99A4-4DFA-8BFA-34AF6A8671B1">
+                <File Id="TIMELINE_NEXUS6P.PNG" Name="timeline_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\timeline_Nexus6p.png" KeyPath='yes' />
+            </Component>
+            <Component Id="TITLE_NEXUS6P.PNG" DiskId="1" Guid="C35647D5-1DBB-4E6A-B281-FB0617EAEA70">
+                <File Id="TITLE_NEXUS6P.PNG" Name="title_Nexus6p.png" Source="..\AutoTapGUI\bin\Release\Images\Nexus6P\title_Nexus6p.png" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="GR5ImagesComponents" Directory="GR5">
+            <!--<Component Id="ERROR_GR5.PNG" DiskId="1" Guid="E87E424B-15CB-46AB-B3F1-97EBC5B386EE">
+                <File Id="ERROR_GR5.PNG" Name="error_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\error_GR5.png" KeyPath='yes' />
+            </Component>-->
+            <Component Id="GREETING_GR5.PNG" DiskId="1" Guid="13677CAC-351C-47BA-B16A-5CDB4720734B">
+                <File Id="GREETING_GR5.PNG" Name="greeting_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\greeting_GR5.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LINK1_GR5.PNG" DiskId="1" Guid="A48E15F8-F55E-4FAF-B1AF-CEB5A731A0DC">
+                <File Id="LINK1_GR5.PNG" Name="link1_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\link1_GR5.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LOADINGA_GR5.PNG" DiskId="1" Guid="A9AB8BF1-BDA6-4A69-8802-106B92D18B4E">
+                <File Id="LOADINGA_GR5.PNG" Name="loadingA_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\loadingA_GR5.png" KeyPath='yes' />
+            </Component>
+            <Component Id="LOADINGB_GR5.PNG" DiskId="1" Guid="3DCFEDA4-B19C-4FDE-B7F4-8EDAAF1BE6FB">
+                <File Id="LOADINGB_GR5.PNG" Name="loadingB_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\loadingB_GR5.png" KeyPath='yes' />
+            </Component>
+            <!--<Component Id="MAINTENANCE_GR5.PNG" DiskId="1" Guid="F119762F-1075-4474-B49E-81B8E04D1E30">
+                <File Id="MAINTENANCE_GR5.PNG" Name="maintenance_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\maintenance_GR5.png" KeyPath='yes' />
+            </Component>-->
+            <Component Id="OPENING_GR5.PNG" DiskId="1" Guid="A7D970E6-6A11-4980-A5DB-09D8453BED75">
+                <File Id="OPENING_GR5.PNG" Name="opening_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\opening_GR5.png" KeyPath='yes' />
+            </Component>
+            <Component Id="TIMELINE_GR5.PNG" DiskId="1" Guid="F57136E2-EC80-4AA8-BD2E-8B7BEC6D85C1">
+                <File Id="TIMELINE_GR5.PNG" Name="timeline_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\timeline_GR5.png" KeyPath='yes' />
+            </Component>
+            <Component Id="TITLE_GR5.PNG" DiskId="1" Guid="6D0FE5CB-CED7-4ECD-91CA-515FD9BC4E6C">
+                <File Id="TITLE_GR5.PNG" Name="title_GR5.png" Source="..\AutoTapGUI\bin\Release\Images\GR5\title_GR5.png" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="PresetComponents" Directory="PRESET">
+            <Component Id="NEXUS5X.INI" DiskId="1" Guid="8020D3B4-D212-4B8F-9452-1E31E3C1A549">
+                <File Id="NEXUS5X.INI" Name="Nexus5x.ini" Source="..\AutoTapGUI\bin\Release\Preset\Nexus5x.ini" KeyPath='yes' />
+            </Component>
+            <Component Id="NEXUS6P.INI" DiskId="1" Guid="892E4AA3-2C09-44C0-A49C-7035F07FB869">
+                <File Id="NEXUS6P.INI" Name="Nexus6p.ini" Source="..\AutoTapGUI\bin\Release\Preset\Nexus6p.ini" KeyPath='yes' />
+            </Component>
+            <Component Id="GR5.INI" DiskId="1" Guid="B57FA672-2EE8-4E51-93B8-E9553A95FCA0">
+                <File Id="GR5.INI" Name="GR5.ini" Source="..\AutoTapGUI\bin\Release\Preset\GR5.ini" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="Tesseract_OcrComponents" Directory="TESSERACT_OCR">
+            <Component Id="AMBIGUOUS_WORDS.EXE" DiskId="1" Guid="EEF517CE-BBD5-4B26-B3AC-E44721E4CBE0">
+                <File Id="AMBIGUOUS_WORDS.EXE" Name="ambiguous_words.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\ambiguous_words.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="CLASSIFIER_TESTER.EXE" DiskId="1" Guid="E1B86F12-94D3-4884-A6E1-9C54524048F2">
+                <File Id="CLASSIFIER_TESTER.EXE" Name="classifier_tester.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\classifier_tester.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="CNTRAINING.EXE" DiskId="1" Guid="CEB2D319-8862-44FE-A3F0-9BEFBDFB6915">
+                <File Id="CNTRAINING.EXE" Name="cntraining.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\cntraining.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="COMBINE_TESSDATA.EXE" DiskId="1" Guid="359ED553-0EC4-4D96-A846-FC1647790FD3">
+                <File Id="COMBINE_TESSDATA.EXE" Name="combine_tessdata.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\combine_tessdata.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="DAWG2WORDLIST.EXE" DiskId="1" Guid="8CF253A1-9D2C-4231-8FC3-5BEC0A625A46">
+                <File Id="DAWG2WORDLIST.EXE" Name="dawg2wordlist.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\dawg2wordlist.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="MFTRAINING.EXE" DiskId="1" Guid="E977784D-CC04-46E4-AC6D-907196361EC6">
+                <File Id="MFTRAINING.EXE" Name="mftraining.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\mftraining.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="SHAPECLUSTERING.EXE" DiskId="1" Guid="5DABBA94-879F-40E4-86F9-BC121B71935E">
+                <File Id="SHAPECLUSTERING.EXE" Name="shapeclustering.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\shapeclustering.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="TESSERACT.EXE" DiskId="1" Guid="3DD583D2-8D8A-4CA3-AD65-0CE435EE79E4">
+                <File Id="TESSERACT.EXE" Name="tesseract.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tesseract.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="UNICHARSET_EXTRACTOR.EXE" DiskId="1" Guid="E6ADC81C-3915-4CAE-8D17-E897FD8194A7">
+                <File Id="UNICHARSET_EXTRACTOR.EXE" Name="unicharset_extractor.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\unicharset_extractor.exe" KeyPath='yes' />
+            </Component>
+            <Component Id="WORDLIST2DAWG.EXE" DiskId="1" Guid="D4208561-437B-4F62-B9C0-4F64F35AC5A2">
+                <File Id="WORDLIST2DAWG.EXE" Name="wordlist2dawg.exe" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\wordlist2dawg.exe" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="docComponents" Directory="DOC">
+            <Component Id="AUTHORS" DiskId="1" Guid="562F6DFC-EC87-4E4F-9F1F-9891A52F2202">
+                <File Id="AUTHORS" Name="AUTHORS" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\doc\AUTHORS" KeyPath='yes' />
+            </Component>
+            <Component Id="COPYING" DiskId="1" Guid="E6A09D30-DB14-4280-8620-5AA2B0C6E68A">
+                <File Id="COPYING" Name="COPYING" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\doc\COPYING" KeyPath='yes' />
+            </Component>
+            <Component Id="EUROTEXT.TIF" DiskId="1" Guid="74FC9687-4ADA-4897-A833-BAC0D86E5715">
+                <File Id="EUROTEXT.TIF" Name="eurotext.tif" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\doc\eurotext.tif" KeyPath='yes' />
+            </Component>
+            <Component Id="PHOTOTEST.TIF" DiskId="1" Guid="70327559-D30F-4566-8965-D21113345B34">
+                <File Id="PHOTOTEST.TIF" Name="phototest.tif" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\doc\phototest.tif" KeyPath='yes' />
+            </Component>
+            <Component Id="README" DiskId="1" Guid="FD0EE6F9-E159-4886-9E0B-EAD1E41D3F16">
+                <File Id="README" Name="README" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\doc\README" />
+            </Component>
+            <Component Id="RELEASENOTES" DiskId="1" Guid="0C1EBE68-E1EE-42AC-AF43-E70A9E9F17DF">
+                <File Id="RELEASENOTES" Name="ReleaseNotes" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\doc\ReleaseNotes" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="javaComponents" Directory="JAVA">
+            <Component Id="SCROLLVIEW.JAR" DiskId="1" Guid="0D0287EA-731A-4784-83A0-396060CB9715">
+                <File Id="SCROLLVIEW.JAR" Name="ScrollView.jar" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\java\ScrollView.jar" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="outputComponents" Directory="OUTPUT">
+            <Component Id="OCR_OUTPUT_BUFFER.TXT" DiskId="1" Guid="08882243-CBF2-4D9F-B2DC-6CAE9941729C">
+                <File Id="OCR_OUTPUT_BUFFER.TXT" Name="ocr_output_buffer.txt" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\output\ocr_output_buffer.txt" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="tessdataComponents" Directory="TESSDATA">
+            <Component Id="CHI_SIM.TRAINEDDATA" DiskId="1" Guid="2BF21E17-993B-4221-A6CE-EA1C279DED2C">
+                <File Id="CHI_SIM.TRAINEDDATA" Name="chi_sim.traineddata" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\chi_sim.traineddata" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.BIGRAMS" DiskId="1" Guid="ED543364-63C8-4923-87D7-A79F0F67DAD5">
+                <File Id="ENG.CUBE.BIGRAMS" Name="eng.cube.bigrams" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.bigrams" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.FOLD" DiskId="1" Guid="FEA2FB38-8EAF-456F-B5B7-939EFB080627">
+                <File Id="ENG.CUBE.FOLD" Name="eng.cube.fold" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.fold" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.LM" DiskId="1" Guid="D27E6E56-D8C7-4FF3-9BB9-E0E3885F5815">
+                <File Id="ENG.CUBE.LM" Name="eng.cube.lm" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.lm" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.LM_" DiskId="1" Guid="E3923D59-000E-4593-B256-BD275FDA6F1C">
+                <File Id="ENG.CUBE.LM_" Name="eng.cube.lm_" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.lm_" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.NN" DiskId="1" Guid="49C73CA2-B4A3-4C78-85F5-1BE78470B605">
+                <File Id="ENG.CUBE.NN" Name="eng.cube.nn" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.nn" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.PARAMS" DiskId="1" Guid="CC457F1F-B3B6-480B-96BA-11DFD7373816">
+                <File Id="ENG.CUBE.PARAMS" Name="eng.cube.params" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.params" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.SIZE" DiskId="1" Guid="65F83680-1719-468A-B10B-AD219098CAB8">
+                <File Id="ENG.CUBE.SIZE" Name="eng.cube.size" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.size" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.CUBE.WORD_FREQ" DiskId="1" Guid="8E22AE56-A356-4BCC-BFF2-2A0143BE932A">
+                <File Id="ENG.CUBE.WORD_FREQ" Name="eng.cube.word-freq" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.cube.word-freq" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.TESSERACT_CUBE.NN" DiskId="1" Guid="B365E124-E1E3-49F6-9589-DF7EDAED0A1C">
+                <File Id="ENG.TESSERACT_CUBE.NN" Name="eng.tesseract_cube.nn" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.tesseract_cube.nn" KeyPath='yes' />
+            </Component>
+            <Component Id="ENG.TRAINEDDATA" DiskId="1" Guid="2C778ABD-687C-4158-AFC1-30798054E7A2">
+                <File Id="ENG.TRAINEDDATA" Name="eng.traineddata" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\eng.traineddata" KeyPath='yes' />
+            </Component>
+            <Component Id="STM.TRAINEDDATA" DiskId="1" Guid="2029D131-08E7-4C69-B9FE-5349C400DD9A">
+                <File Id="STM.TRAINEDDATA" Name="stm.traineddata" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\stm.traineddata" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="configsComponents" Directory="CONFIGS">
+            <Component Id="AMBIGS.TRAIN" DiskId="1" Guid="D054041E-7983-45E8-8DDE-FA647B0E5BB5">
+                <File Id="AMBIGS.TRAIN" Name="ambigs.train" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\ambigs.train" KeyPath='yes' />
+            </Component>
+            <Component Id="API_CONFIG" DiskId="1" Guid="BEB64D3A-C30D-4028-AD07-FE2449F7D454">
+                <File Id="API_CONFIG" Name="api_config" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\api_config" KeyPath='yes' />
+            </Component>
+            <Component Id="BIGRAM" DiskId="1" Guid="90BB1D34-D937-48D5-93CD-F846F4662FD9">
+                <File Id="BIGRAM" Name="bigram" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\bigram" KeyPath='yes' />
+            </Component>
+            <Component Id="BOX.TRAIN" DiskId="1" Guid="C1BA2785-3507-415E-A54E-1499238F9A00">
+                <File Id="BOX.TRAIN" Name="box.train" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\box.train" KeyPath='yes' />
+            </Component>
+            <Component Id="BOX.TRAIN.STDERR" DiskId="1" Guid="F2B9BE8C-CD9C-47A7-BE7F-2CE571CAB962">
+                <File Id="BOX.TRAIN.STDERR" Name="box.train.stderr" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\box.train.stderr" KeyPath='yes' />
+            </Component>
+            <Component Id="DIGITS" DiskId="1" Guid="0990EE01-0706-4184-BD4E-7ED03EF3C8D9">
+                <File Id="DIGITS" Name="digits" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\digits" KeyPath='yes' />
+            </Component>
+            <Component Id="HOCR" DiskId="1" Guid="662139EB-46EE-4932-A378-D01F4E67F32F">
+                <File Id="HOCR" Name="hocr" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\hocr" KeyPath='yes' />
+            </Component>
+            <Component Id="INTER" DiskId="1" Guid="F5ACCD09-3FB4-4852-9BAD-FBFC9A6F0E03">
+                <File Id="INTER" Name="inter" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\inter" KeyPath='yes' />
+            </Component>
+            <Component Id="KANNADA" DiskId="1" Guid="BD4EA884-3175-4D1B-94E1-AD9B3B78550F">
+                <File Id="KANNADA" Name="kannada" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\kannada" KeyPath='yes' />
+            </Component>
+            <Component Id="LINEBOX" DiskId="1" Guid="866E0E76-3C13-47E0-AAAD-CBE2A4F36E5E">
+                <File Id="LINEBOX" Name="linebox" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\linebox" KeyPath='yes' />
+            </Component>
+            <Component Id="LOGFILE" DiskId="1" Guid="35D4D622-768F-43EE-9599-502872A52729">
+                <File Id="LOGFILE" Name="logfile" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\logfile" KeyPath='yes' />
+            </Component>
+            <Component Id="MAKEBOX" DiskId="1" Guid="5DA0E032-CA69-450D-A1EE-8869205C728B">
+                <File Id="MAKEBOX" Name="makebox" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\makebox" KeyPath='yes' />
+            </Component>
+            <Component Id="NUM" DiskId="1" Guid="E252EA58-6CFF-448E-9664-A5FA303E0A7C">
+                <File Id="NUM" Name="num" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\num" KeyPath='yes' />
+            </Component>
+            <Component Id="QUIET" DiskId="1" Guid="93B4BCF7-1FD2-44C6-8DF0-CD1A8276C792">
+                <File Id="QUIET" Name="quiet" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\quiet" KeyPath='yes' />
+            </Component>
+            <Component Id="REBOX" DiskId="1" Guid="70285373-50DF-4384-8E57-C87E374F2D5E">
+                <File Id="REBOX" Name="rebox" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\rebox" KeyPath='yes' />
+            </Component>
+            <Component Id="STROKEWIDTH" DiskId="1" Guid="5E9B4C35-C37A-4C10-A8DB-FA10948A933E">
+                <File Id="STROKEWIDTH" Name="strokewidth" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\strokewidth" KeyPath='yes' />
+            </Component>
+            <Component Id="UNLV" DiskId="1" Guid="EFE9FA68-C0BB-47E2-BF7C-517525B94DDC">
+                <File Id="UNLV" Name="unlv" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\configs\unlv" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="tessconfigsComponents" Directory="TESSCONFIGS">
+            <Component Id="BATCH" DiskId="1" Guid="A5C3BAE5-79D0-421A-9C66-BB5A90C32604">
+                <File Id="BATCH" Name="batch" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\tessconfigs\batch" KeyPath='yes' />
+            </Component>
+            <Component Id="BATCH.NOCHOP" DiskId="1" Guid="B2174EE3-6CA5-4B62-8B0B-4C5FCA94B7B6">
+                <File Id="BATCH.NOCHOP" Name="batch.nochop" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\tessconfigs\batch.nochop" KeyPath='yes' />
+            </Component>
+            <Component Id="MATDEMO" DiskId="1" Guid="18A62226-87D5-459C-8A58-D3CDD75CD904">
+                <File Id="MATDEMO" Name="matdemo" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\tessconfigs\matdemo" KeyPath='yes' />
+            </Component>
+            <Component Id="MSDEMO" DiskId="1" Guid="6B0A43CE-87A2-4A1A-9077-B2D4527B1A33">
+                <File Id="MSDEMO" Name="msdemo" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\tessconfigs\msdemo" KeyPath='yes' />
+            </Component>
+            <Component Id="NOBATCH" DiskId="1" Guid="52C3134D-9975-49F2-90D4-E58A148F4A4C">
+                <File Id="NOBATCH" Name="nobatch" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\tessconfigs\nobatch" KeyPath='yes' />
+            </Component>
+            <Component Id="SEGDEMO" DiskId="1" Guid="69444E72-478F-458E-9EE1-0B64E135A105">
+                <File Id="SEGDEMO" Name="segdemo" Source="..\AutoTapGUI\bin\Release\Tesseract-OCR\tessdata\tessconfigs\segdemo" KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id="ProgramMenuShortcutComponents" Directory="ProgramMenuDir">
+            <Component Id="ProgramMenuDir" Guid="72B0E26B-CEE2-4005-8454-2F96100348B9">
+                <RemoveFolder Id='ProgramMenuDir' On='uninstall'/>
+                <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+            </Component>
+        </ComponentGroup>
+        <ComponentGroup Id='CommonAppDataFolderLWRComponents' Directory='CommonAppDataFolderLWR'>
+            <Component Id ='RemCommonAppDataFolderLWR' Guid='5D240ECE-BBAC-422D-BAD1-81A758B58452'>
+                <RemoveFolder Id='RemCommonAppDataFolderLWR' On='uninstall' Directory='CommonAppDataFolderLWR'/>
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
