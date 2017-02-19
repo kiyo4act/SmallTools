@@ -110,8 +110,16 @@ namespace AdbOperations
             Process process = Process.Start(AdbProcessStartInfo);
             process?.WaitForExit();
             string output = process?.StandardOutput.ReadLine();
-            if (output != null) return int.Parse(output);
-            return -1;
+            int iResult = 100;
+            try
+            {
+                iResult = int.Parse(output);
+            }
+            catch (Exception)
+            {
+                return 100;
+            }
+            return iResult;
         }
     }
 }
