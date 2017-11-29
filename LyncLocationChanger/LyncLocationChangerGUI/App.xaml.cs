@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace LyncLocationChangerGUI
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        private static Mutex mutex = null;
+
+        /// <summary>
+        /// タスクトレイに表示するアイコン
+        /// </summary>
+        private NotifyIconWrapper notifyIcon;
+
+        /// <summary>
+        /// System.Windows.Application.Startup イベント を発生させます。
+        /// </summary>
+        /// <param name="e">イベントデータ を格納している StartupEventArgs</param>
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var name = this.GetType().Assembly.GetName().Name;
+            mutex = new Mutex(false, name);
+
+            if (!mutex.WaitOne(TimeSpan.Zero, false))
+            {
+                mutex.Close();
+                this.Shutdown();
+                return;
+            }
+
+            this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            this.notifyIcon = new NotifyIconWrapper();
+        }
+
+        /// <summary>
+        /// System.Windows.Application.Exit イベント を発生させます。
+        /// </summary>
+        /// <param name="e">イベントデータ を格納している ExitEventArgs</param>
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            this.notifyIcon.Dispose();
+
+            if (mutex != null)
+            {
+                mutex.ReleaseMutex();
+                mutex.Close();
+            }
+        }
+    }
+}

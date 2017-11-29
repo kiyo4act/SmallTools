@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyncLocationChangerGUI", "LyncLocationChangerGUI\LyncLocationChangerGUI.csproj", "{FC2278FC-AEA0-4600-B712-5250487977E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCLIoT", "PCLIoT\PCLIoT.csproj", "{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}"
+EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup", "Setup\Setup.isproj", "{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC2278FC-AEA0-4600-B712-5250487977E1} = {FC2278FC-AEA0-4600-B712-5250487977E1}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
+		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2278FC-AEA0-4600-B712-5250487977E1}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{67C7A5B5-1CF7-4C8A-990B-5E8A98127B40}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.Debug|Any CPU.ActiveCfg = DVD-5
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.Debug|Any CPU.Build.0 = DVD-5
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.DVD-5|Any CPU.Build.0 = DVD-5
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.Release|Any CPU.ActiveCfg = SingleImage
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.Release|Any CPU.Build.0 = SingleImage
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{7BA4CDD1-D194-47D0-A033-CAD50F74B83E}.SingleImage|Any CPU.Build.0 = SingleImage
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
